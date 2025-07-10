@@ -32,6 +32,10 @@ public class JobSeekerService {
         return repository.findByUserUserId(userId);
     }
 
+    public Optional<JobSeeker> getByEmail(String email) {
+        return repository.findByUserEmail(email);
+    }    
+
     public JobSeeker updateJobSeeker(Integer id, JobSeeker updatedJobSeeker) {
         return repository.findById(id).map(existing -> {
             existing.setResumeUrl(updatedJobSeeker.getResumeUrl());
