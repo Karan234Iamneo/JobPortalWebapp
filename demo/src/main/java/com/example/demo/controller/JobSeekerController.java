@@ -26,4 +26,14 @@ public class JobSeekerController {
     public List<JobSeeker> getAll() {
         return service.getAll();
     }
+
+    @GetMapping("/user/{userId}")
+    public Optional<JobSeeker> getByUserId(@PathVariable Integer userId) {
+        return service.getByUserId(userId);
+    }
+
+    @PutMapping("/{id}")
+    public JobSeeker updateJobSeeker(@PathVariable Integer id, @RequestBody JobSeeker updatedJobSeeker) {
+        return service.updateJobSeeker(id, updatedJobSeeker);
+    }
 }
