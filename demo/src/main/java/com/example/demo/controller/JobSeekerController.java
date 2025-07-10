@@ -32,6 +32,12 @@ public class JobSeekerController {
         return service.getByUserId(userId);
     }
 
+    @GetMapping("/email/{email}")
+    public Optional<JobSeeker> getByEmail(@PathVariable String email) {
+        return service.getByEmail(email);
+    }
+
+
     @PutMapping("/{id}")
     public JobSeeker updateJobSeeker(@PathVariable Integer id, @RequestBody JobSeeker updatedJobSeeker) {
         return service.updateJobSeeker(id, updatedJobSeeker);
