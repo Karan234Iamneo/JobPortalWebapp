@@ -34,4 +34,15 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+    public User updateUser(Integer id, User updatedUser) {
+        User existing = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        existing.setName(updatedUser.getName());
+        existing.setEmail(updatedUser.getEmail());
+        existing.setPhone(updatedUser.getPhone());
+        existing.setAddress(updatedUser.getAddress());
+        existing.setRole(updatedUser.getRole());
+        existing.setPassword(updatedUser.getPassword()); // In real-world, hash this
+        return userRepository.save(existing);
+    }    
 }

@@ -32,8 +32,18 @@ public class UserController {
         return service.getUsersByRole(role);
     }
 
+    @GetMapping("/email/{email}")
+    public Optional<User> getUserByEmail(@PathVariable String email) {
+        return service.getUserByEmail(email);
+    }
+
     @GetMapping
     public List<User> getAllUsers() {
         return service.getAllUsers();
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
+        return service.updateUser(id, updatedUser);
     }
 }
