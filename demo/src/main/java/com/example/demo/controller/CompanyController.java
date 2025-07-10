@@ -17,11 +17,6 @@ public class CompanyController {
         this.service = service;
     }
 
-    @PostMapping
-    public Company create(@RequestBody Company company) {
-        return service.createCompany(company);
-    }
-
     @GetMapping("/{id}")
     public Optional<Company> getById(@PathVariable Integer id) {
         return service.getById(id);

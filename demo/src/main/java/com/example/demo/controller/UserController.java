@@ -17,11 +17,6 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return service.createUser(user);
-    }
-
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable Integer id) {
         return service.getUserById(id);
