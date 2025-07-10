@@ -179,7 +179,7 @@ CREATE TABLE `job_seeker` (
   `resume_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`jobseeker_id`),
   UNIQUE KEY `UKls9yllllsot92tgfvwdpqsclo` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +213,6 @@ CREATE TABLE `job_seeker_job_role_interests` (
 
 LOCK TABLES `job_seeker_job_role_interests` WRITE;
 /*!40000 ALTER TABLE `job_seeker_job_role_interests` DISABLE KEYS */;
-INSERT INTO `job_seeker_job_role_interests` VALUES (4,'Backend Developer'),(4,'Software Engineer'),(5,'Backend Developer'),(5,'Software Engineer');
 /*!40000 ALTER TABLE `job_seeker_job_role_interests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,7 +261,6 @@ CREATE TABLE `job_seeker_skills` (
 
 LOCK TABLES `job_seeker_skills` WRITE;
 /*!40000 ALTER TABLE `job_seeker_skills` DISABLE KEYS */;
-INSERT INTO `job_seeker_skills` VALUES (4,'Java'),(4,'Spring Boot'),(4,'MySQL'),(5,'Java'),(5,'Spring Boot'),(5,'MySQL');
 /*!40000 ALTER TABLE `job_seeker_skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,7 +336,7 @@ CREATE TABLE `user` (
   `role` enum('admin','jobseeker','recruiter') NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UKob8kqyqqgmefl0aco34akdtpe` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -347,7 +345,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'9876543210','john@example.com','John Doe','123 Main Street','john@123','jobseeker'),(2,'9876543210','alice@example.com','Alice','123 Main Street','john@123','jobseeker'),(3,'9876543210','salmankhan@example.com','Salmankhan','123 Main Street','john@123','jobseeker');
+INSERT INTO `user` VALUES (1,'9876543210','salmankhan@example.com','Salmankhan','123 Main Street','john@123','jobseeker');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -360,4 +358,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-10 10:26:09
+-- Dump completed on 2025-07-10 10:41:11
