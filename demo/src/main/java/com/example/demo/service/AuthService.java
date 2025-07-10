@@ -1,46 +1,70 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.dto.*;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepo;
+    private final JobSeekerRepository jobSeekerRepo;
+    private final CompanyRepository companyRepo;
 
-    public AuthService(UserRepository repository) {
-        this.repository = repository;
+    public AuthService(UserRepository userRepo, JobSeekerRepository jobSeekerRepo, CompanyRepository companyRepo) {
+        this.userRepo = userRepo;
+        this.jobSeekerRepo = jobSeekerRepo;
+        this.companyRepo = companyRepo;
     }
 
-    public User register(RegisterRequest request) {
-        if (request.getRole() == User.Role.admin) {
-            throw new IllegalArgumentException("Admin registration is not allowed.");
-        }
-        if (repository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already in use.");
+    public User registerJobSeeker(JobSeekerRegisterRequest request) {
+        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already registered.");
         }
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPhone(request.getPhone());
-        user.setAddress(request.getAddress());
-        user.setRole(request.getRole());
-        user.setPassword(request.getPassword()); // Ideally hash it
+        User user = new User(null, request.getName(), request.getEmail(), request.getPhone(),
+                request.getAddress(), User.Role.jobseeker, request.getPassword());
+        user = userRepo.save(user);
 
-        return repository.save(user);
+        JobSeeker js = new JobSeeker();
+        js.setUser(user);
+        js.setResumeUrl(request.getResumeUrl());
+        js.setSkills(request.getSkills());
+        js.setJobRoleInterests(request.getJobRoleInterests());
+
+        jobSeekerRepo.save(js);
+
+        return user;
+    }
+
+    public User registerCompany(CompanyRegisterRequest request) {
+        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already registered.");
+        }
+
+        User user = new User(null, request.getName(), request.getEmail(), request.getPhone(),
+                request.getAddress(), User.Role.recruiter, request.getPassword());
+        user = userRepo.save(user);
+
+        Company company = new Company();
+        company.setCompanyName(request.getCompanyName());
+        company.setCompanyLocation(request.getCompanyLocation());
+        company.setAbout(request.getAbout());
+        company.setRecruiter(user);
+        company.setStatus(Company.Status.in_review);
+
+        companyRepo.save(company);
+
+        return user;
     }
 
     public AuthResponse login(AuthRequest request) {
-        User user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+        User user = userRepo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
         if (!user.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("Invalid email or password");
+            throw new RuntimeException("Invalid email or password");
         }
 
         return new AuthResponse(user.getUserId(), user.getRole(), "Login successful");
