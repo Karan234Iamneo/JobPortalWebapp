@@ -41,6 +41,7 @@ public class JwtUtil {
                     .parseClaimsJws(token);
             return true;
         } catch (JwtException e) {
+            System.out.println(e);
             return false;
         }
     }
