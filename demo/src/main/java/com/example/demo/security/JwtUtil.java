@@ -45,4 +45,16 @@ public class JwtUtil {
             return false;
         }
     }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET.getBytes())
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public Integer extractUserId(String token) {
+        final Claims claims = extractAllClaims(token);
+        return ((Number) claims.get("userId")).intValue(); // safely cast
+    }
 }

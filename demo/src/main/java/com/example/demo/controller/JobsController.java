@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Jobs;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.JobsService;
-
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +15,12 @@ import java.util.Optional;
 public class JobsController {
 
     private final JobsService service;
+    private final JwtUtil jwtUtil;
 
-    public JobsController(JobsService service) {
+    // ✅ Inject JwtUtil via constructor
+    public JobsController(JobsService service, JwtUtil jwtUtil) {
         this.service = service;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
@@ -30,13 +33,11 @@ public class JobsController {
         return service.getById(id);
     }
 
-    // Publicly accessible - list all published jobs
     @GetMapping("/status/published")
     public List<Jobs> getPublishedJobs() {
         return service.getPublishedJobs();
     }
 
-    // Publicly accessible - get single job only if published
     @GetMapping("/published/{id}")
     public ResponseEntity<Jobs> getPublishedJobById(@PathVariable Integer id) {
         return service.getPublishedJobById(id)
@@ -54,16 +55,22 @@ public class JobsController {
         return service.getByStatus(status);
     }
 
-    private Integer getCurrentUserId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var principal = (CustomUserDetails) auth.getPrincipal(); // Or however your principal is modeled
-        return principal.getUserId(); // Adjust if your custom class is named differently
+    // ✅ Accept HttpServletRequest and use injected JwtUtil
+    private Integer getCurrentUserId(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            return jwtUtil.extractUserId(token);
+        }
+        return null; // or throw Unauthorized
     }
 
+    // ✅ Pass request into getCurrentUserId
     @PutMapping("/{id}")
-    public ResponseEntity<Jobs> updateJob(@PathVariable Integer id, @RequestBody Jobs updatedJob) {
-        Integer currentUserId = getCurrentUserId();
+    public ResponseEntity<Jobs> updateJob(@PathVariable Integer id,
+                                          @RequestBody Jobs updatedJob,
+                                          HttpServletRequest request) {
+        Integer currentUserId = getCurrentUserId(request);
         return ResponseEntity.ok(service.updateJob(id, updatedJob, currentUserId));
     }
-
 }
