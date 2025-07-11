@@ -18,7 +18,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Integer id) {
+    public User getUserById(@PathVariable Integer id) {
         return service.getUserById(id);
     }
 
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public Optional<User> getUserByEmail(@PathVariable String email) {
+    public User getUserByEmail(@PathVariable String email) {
         return service.getUserByEmail(email);
     }
 

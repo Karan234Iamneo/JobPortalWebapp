@@ -54,4 +54,8 @@ public class UserService {
         existing.setPassword(updatedUser.getPassword());
         return userRepository.save(existing);
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
