@@ -36,4 +36,10 @@ public class JobsController {
     public List<Jobs> getByStatus(@PathVariable Jobs.Status status) {
         return service.getByStatus(status);
     }
+
+    @PutMapping("/{id}")
+    public Jobs updateJob(@PathVariable Integer id, @RequestBody Jobs updatedJob) {
+        return service.updateJob(id, updatedJob);
+    }
+
 }

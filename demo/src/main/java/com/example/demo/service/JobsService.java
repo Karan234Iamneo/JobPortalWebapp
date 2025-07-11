@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Jobs;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.entity.Company;
 import com.example.demo.repository.JobsRepository;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,22 @@ public class JobsService {
     public List<Jobs> getAll() {
         return jobsRepository.findAll();
     }
+
+    public Jobs updateJob(Integer id, Jobs updatedJob) {
+        Jobs existing = jobsRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + id));
+    
+        // Update all relevant fields
+        existing.setTitle(updatedJob.getTitle());
+        existing.setDescription(updatedJob.getDescription());
+        existing.setLocation(updatedJob.getLocation());
+        existing.setYearsOfExperience(updatedJob.getYearsOfExperience());
+        existing.setMinSalary(updatedJob.getMinSalary());
+        existing.setMaxSalary(updatedJob.getMaxSalary());
+        existing.setStatus(updatedJob.getStatus());
+        existing.setSkills(updatedJob.getSkills());
+    
+        return jobsRepository.save(existing);
+    }
+
 }

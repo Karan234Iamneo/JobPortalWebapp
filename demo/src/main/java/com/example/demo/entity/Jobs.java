@@ -14,6 +14,8 @@ public class Jobs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer jobId;
 
+    private String Title;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
