@@ -13,6 +13,8 @@ public class JobQuestions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer questionId;
 
+    private Integer questionNumber;
+
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
     private Jobs job;

@@ -35,7 +35,7 @@ public class RecruiterService {
         Jobs job = jobsRepo.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found"));
 
-        if (!job.getEmployer().getUserId().equals(recruiter.getUserId())) {
+        if (!job.getEmployer().getRecruiter().getUserId().equals(recruiter.getUserId())) {
             throw new AccessDeniedException("You do not own this job posting");
         }
 
@@ -54,7 +54,7 @@ public class RecruiterService {
             }).toList();
 
             return new ApplicationReviewDTO(
-                    application.getId(),
+                    application.getJobApplicationId(),
                     seeker.getUser().getName(),
                     application.getStatus().toString(),
                     answerDTOs
