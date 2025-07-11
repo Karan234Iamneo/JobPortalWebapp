@@ -325,7 +325,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'9876543210','ritika.sharma@example.com','Ritika Sharma','Bengaluru, Karnataka','securePassword123','jobseeker');
+INSERT INTO `user` VALUES (1,'9876543210','ritika.sharma1@example.com','Ritika Sharma','Bengaluru, Karnataka','securePassword123','jobseeker');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -338,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-11  6:57:28
+-- Dump completed on 2025-07-11  7:12:27
