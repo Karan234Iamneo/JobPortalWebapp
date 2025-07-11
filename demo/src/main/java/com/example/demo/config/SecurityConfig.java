@@ -40,9 +40,7 @@ public class SecurityConfig {
                         // Admin
                         .requestMatchers("/api/bans/**").hasRole("admin")
                         .requestMatchers("/api/admin/**").hasRole("admin")
-
-                        // Shared/User
-                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/users/**").hasRole("admin")
 
                         .anyRequest().denyAll())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
