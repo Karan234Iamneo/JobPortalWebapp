@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Jobs;
+import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.entity.Company;
 import com.example.demo.repository.JobsRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -46,21 +50,24 @@ public class JobsService {
         return jobsRepository.findAll();
     }
 
-    public Jobs updateJob(Integer id, Jobs updatedJob) {
-        Jobs existing = jobsRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + id));
+    public Jobs updateJob(Integer id, Jobs updatedJob, Integer currentUserId) {
+        return jobsRepository.findById(id).map(existing -> {
+            if (!existing.getEmployer().getRecruiter().getUserId().equals(currentUserId)) {
+                throw new AccessDeniedException("You are not the owner of this job post.");
+            }
 
-        // Update all relevant fields
-        existing.setTitle(updatedJob.getTitle());
-        existing.setDescription(updatedJob.getDescription());
-        existing.setLocation(updatedJob.getLocation());
-        existing.setYearsOfExperience(updatedJob.getYearsOfExperience());
-        existing.setMinSalary(updatedJob.getMinSalary());
-        existing.setMaxSalary(updatedJob.getMaxSalary());
-        existing.setStatus(updatedJob.getStatus());
-        existing.setSkills(updatedJob.getSkills());
+            // Copy allowed updatable fields
+            existing.setTitle(updatedJob.getTitle());
+            existing.setDescription(updatedJob.getDescription());
+            existing.setLocation(updatedJob.getLocation());
+            existing.setYearsOfExperience(updatedJob.getYearsOfExperience());
+            existing.setMinSalary(updatedJob.getMinSalary());
+            existing.setMaxSalary(updatedJob.getMaxSalary());
+            existing.setSkills(updatedJob.getSkills());
+            existing.setStatus(updatedJob.getStatus());
 
-        return jobsRepository.save(existing);
+            return jobsRepository.save(existing);
+        }).orElseThrow(() -> new EntityNotFoundException("Job not found"));
     }
 
 }

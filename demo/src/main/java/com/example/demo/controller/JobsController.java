@@ -4,6 +4,7 @@ import com.example.demo.entity.Jobs;
 import com.example.demo.service.JobsService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,6 @@ public class JobsController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
     @GetMapping
     public List<Jobs> getAll() {
         return service.getAll();
@@ -54,9 +54,16 @@ public class JobsController {
         return service.getByStatus(status);
     }
 
+    private Integer getCurrentUserId() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        var principal = (CustomUserDetails) auth.getPrincipal(); // Or however your principal is modeled
+        return principal.getUserId(); // Adjust if your custom class is named differently
+    }
+
     @PutMapping("/{id}")
-    public Jobs updateJob(@PathVariable Integer id, @RequestBody Jobs updatedJob) {
-        return service.updateJob(id, updatedJob);
+    public ResponseEntity<Jobs> updateJob(@PathVariable Integer id, @RequestBody Jobs updatedJob) {
+        Integer currentUserId = getCurrentUserId();
+        return ResponseEntity.ok(service.updateJob(id, updatedJob, currentUserId));
     }
 
 }
