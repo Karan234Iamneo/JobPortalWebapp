@@ -1,26 +1,34 @@
 package com.example.demo.service;
 
-import java.util.*;
-import com.example.demo.repository.*;
-import com.example.demo.dto.*;
+import com.example.demo.dto.ApplicationAnswerDTO;
+import com.example.demo.dto.ApplicationReviewDTO;
 import com.example.demo.entity.*;
+import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.*;
 
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
 public class RecruiterService {
 
     private final JobsRepository jobsRepo;
     private final JobApplicationRepository appRepo;
     private final JobApplicationAnswersRepository answersRepo;
-    private final CompanyRepository companyRepo;
+    private final JobQuestionsRepository questionRepo;
 
-    public RecruiterService(JobsRepository jobsRepo,
-                            JobApplicationRepository appRepo,
-                            JobApplicationAnswersRepository answersRepo,
-                            CompanyRepository companyRepo) {
+    public RecruiterService(
+            JobsRepository jobsRepo,
+            JobApplicationRepository appRepo,
+            JobApplicationAnswersRepository answersRepo,
+            JobQuestionsRepository questionRepo
+    ) {
         this.jobsRepo = jobsRepo;
         this.appRepo = appRepo;
         this.answersRepo = answersRepo;
-        this.companyRepo = companyRepo;
+        this.questionRepo = questionRepo;
     }
 
     public List<ApplicationReviewDTO> getApplicationsWithAnswersByJob(Integer jobId, User recruiter) {
@@ -37,8 +45,13 @@ public class RecruiterService {
             JobSeeker seeker = application.getJobseeker();
             List<JobApplicationAnswers> answers = answersRepo.findByJobApplication(application);
 
-            List<ApplicationAnswerDTO> answerDTOs = answers.stream().map(ans -> new ApplicationAnswerDTO(
-                    ans.getQuestion(), ans.getAnswer())).toList();
+            List<ApplicationAnswerDTO> answerDTOs = answers.stream().map(ans -> {
+                JobQuestions question = questionRepo
+                        .findByJobAndQuestionNumber(job, ans.getQuestionNumber())
+                        .orElseThrow(() -> new ResourceNotFoundException("Question not found for number: " + ans.getQuestionNumber()));
+
+                return new ApplicationAnswerDTO(question.getQuestion(), ans.getAnswer());
+            }).toList();
 
             return new ApplicationReviewDTO(
                     application.getId(),
@@ -47,22 +60,5 @@ public class RecruiterService {
                     answerDTOs
             );
         }).toList();
-    }
-
-    public List<Jobs> getJobsPostedByRecruiter(User recruiter) {
-        List<Company> companies = companyRepo.findByRecruiter(recruiter);
-    
-        if (companies.isEmpty()) {
-            throw new ResourceNotFoundException("No companies found for this recruiter.");
-        }
-    
-        return companies.stream()
-                .flatMap(company -> jobsRepo.findByEmployer(company).stream())
-                .toList();
-    }
-    
-
-    public List<Company> getCompaniesManagedBy(User recruiter) {
-        return companyRepo.findByRecruiter(recruiter);
     }
 }
