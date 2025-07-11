@@ -1,13 +1,14 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.User.Role;
+import com.example.demo.entity.User;
 import lombok.*;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthResponse {
     private Integer userId;
-    private Role role;
+    private User.Role role;
     private String message;
+    private String token;
 }

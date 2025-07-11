@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
+import com.example.demo.security.JwtUtil;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,11 +13,13 @@ public class AuthService {
     private final UserRepository userRepo;
     private final JobSeekerRepository jobSeekerRepo;
     private final CompanyRepository companyRepo;
+    private final JwtUtil jwtUtil;
 
-    public AuthService(UserRepository userRepo, JobSeekerRepository jobSeekerRepo, CompanyRepository companyRepo) {
+    public AuthService(UserRepository userRepo, JobSeekerRepository jobSeekerRepo, CompanyRepository companyRepo, JwtUtil jwtUtil) {
         this.userRepo = userRepo;
         this.jobSeekerRepo = jobSeekerRepo;
         this.companyRepo = companyRepo;
+        this.jwtUtil = jwtUtil;
     }
 
     public User registerJobSeeker(JobSeekerRegisterRequest request) {
@@ -62,11 +66,13 @@ public class AuthService {
     public AuthResponse login(AuthRequest request) {
         User user = userRepo.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
-
+    
         if (!user.getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
-
-        return new AuthResponse(user.getUserId(), user.getRole(), "Login successful");
+    
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+    
+        return new AuthResponse(user.getUserId(), user.getRole(), "Login successful", token);
     }
 }
