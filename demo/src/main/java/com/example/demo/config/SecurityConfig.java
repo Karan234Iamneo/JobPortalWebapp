@@ -3,6 +3,7 @@ package com.example.demo.config;
 import com.example.demo.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,7 +34,13 @@ public class SecurityConfig {
 
                         // Recruiter
                         .requestMatchers("/api/companies/**").hasRole("recruiter")
+                        // Public/Jobseeker can view published jobs
+                        .requestMatchers(HttpMethod.GET, "/api/jobs", "/api/jobs/status/published", "/api/jobs/{id}")
+                        .permitAll()
+
+                        // Recruiter can manage all jobs (including PUT/POST)
                         .requestMatchers("/api/jobs/**").hasRole("recruiter")
+
                         .requestMatchers("/api/job-questions/**").hasRole("recruiter")
                         .requestMatchers("/api/recruiter/**").hasRole("recruiter")
 

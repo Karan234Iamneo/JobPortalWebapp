@@ -21,6 +21,15 @@ public class JobsService {
         return jobsRepository.save(job);
     }
 
+    // For listing only published jobs publicly
+    public List<Jobs> getPublishedJobs() {
+        return jobsRepository.findByStatus(Jobs.Status.published);
+    }
+
+    public Optional<Jobs> getPublishedJobById(Integer id) {
+        return jobsRepository.findByIdAndStatus(id, Jobs.Status.published);
+    }
+
     public Optional<Jobs> getById(Integer id) {
         return jobsRepository.findById(id);
     }
@@ -39,8 +48,8 @@ public class JobsService {
 
     public Jobs updateJob(Integer id, Jobs updatedJob) {
         Jobs existing = jobsRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + id));
-    
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with ID: " + id));
+
         // Update all relevant fields
         existing.setTitle(updatedJob.getTitle());
         existing.setDescription(updatedJob.getDescription());
@@ -50,7 +59,7 @@ public class JobsService {
         existing.setMaxSalary(updatedJob.getMaxSalary());
         existing.setStatus(updatedJob.getStatus());
         existing.setSkills(updatedJob.getSkills());
-    
+
         return jobsRepository.save(existing);
     }
 
