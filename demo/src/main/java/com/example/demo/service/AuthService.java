@@ -84,7 +84,7 @@ public class AuthService {
             throw new RuntimeException("You are banned from accessing the platform.");
         }
     
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getUserId(), user.getEmail(), user.getRole().name());
     
         return new AuthResponse(user.getUserId(), user.getRole(), "Login successful", token);
     }
