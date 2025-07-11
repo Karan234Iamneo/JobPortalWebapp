@@ -11,4 +11,5 @@ public interface AdminBanRepository extends JpaRepository<AdminBan, Integer> {
     List<AdminBan> findByEntityTypeAndEntityId(EntityType entityType, Integer entityId);
     List<AdminBan> findByStatus(Status status);
     List<AdminBan> findByBannedBy(User bannedBy);
+    List<AdminBan> findByEntityTypeAndEntityIdAndStatus(EntityType type, Integer id, Status status);
 }
