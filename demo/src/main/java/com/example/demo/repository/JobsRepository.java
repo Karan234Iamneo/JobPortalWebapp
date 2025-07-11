@@ -9,5 +9,5 @@ import java.util.*;
 public interface JobsRepository extends JpaRepository<Jobs, Integer> {
     List<Jobs> findByEmployer(Company employer);
     List<Jobs> findByStatus(Status status);
-    Optional<Jobs> findByIdAndStatus(Integer id, Jobs.Status status);
+    Optional<Jobs> findByJobIdAndStatus(Integer jobId, Jobs.Status status); // ✅ fixed here
 }

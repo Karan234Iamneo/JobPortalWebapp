@@ -31,8 +31,9 @@ public class JobsService {
     }
 
     public Optional<Jobs> getPublishedJobById(Integer id) {
-        return jobsRepository.findByIdAndStatus(id, Jobs.Status.published);
+        return jobsRepository.findByJobIdAndStatus(id, Jobs.Status.published);
     }
+    
 
     public Optional<Jobs> getById(Integer id) {
         return jobsRepository.findById(id);
