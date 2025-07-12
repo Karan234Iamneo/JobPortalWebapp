@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.JobResponseDTO;
 import com.example.demo.entity.Jobs;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.JobsService;
@@ -24,8 +25,20 @@ public class JobsController {
     }
 
     @PostMapping
-    public Jobs create(@RequestBody Jobs job) {
-        return service.createJob(job);
+    public JobResponseDTO create(@RequestBody Jobs job, HttpServletRequest request) {
+        Integer currentUserId = getCurrentUserId(request);
+        Jobs saved = service.createJob(job, currentUserId);
+        return new JobResponseDTO(
+                saved.getJobId(),
+                saved.getTitle(),
+                saved.getDescription(),
+                saved.getLocation(),
+                saved.getYearsOfExperience(),
+                saved.getMinSalary(),
+                saved.getMaxSalary(),
+                saved.getSkills(),
+                saved.getStatus().name(),
+                saved.getEmployer().getCompanyName());
     }
 
     @GetMapping("/{id}")
@@ -68,8 +81,8 @@ public class JobsController {
     // ✅ Pass request into getCurrentUserId
     @PutMapping("/{id}")
     public ResponseEntity<Jobs> updateJob(@PathVariable Integer id,
-                                          @RequestBody Jobs updatedJob,
-                                          HttpServletRequest request) {
+            @RequestBody Jobs updatedJob,
+            HttpServletRequest request) {
         Integer currentUserId = getCurrentUserId(request);
         return ResponseEntity.ok(service.updateJob(id, updatedJob, currentUserId));
     }

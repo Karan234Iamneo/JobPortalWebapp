@@ -24,7 +24,7 @@ public class CompanyService {
         return companyRepository.findById(id);
     }
 
-    public List<Company> getByRecruiter(User user) {
+    public Optional<Company> getByRecruiter(User user) {
         return companyRepository.findByRecruiter(user);
     }
 

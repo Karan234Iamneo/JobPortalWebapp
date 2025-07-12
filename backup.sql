@@ -72,7 +72,7 @@ CREATE TABLE `company` (
   UNIQUE KEY `UK46jubpbtfae2gfb74a3x6qug7` (`company_name`),
   KEY `FK80qa14g7djyn82qacof9qsh75` (`recruiter_id`),
   CONSTRAINT `FK80qa14g7djyn82qacof9qsh75` FOREIGN KEY (`recruiter_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,6 +81,7 @@ CREATE TABLE `company` (
 
 LOCK TABLES `company` WRITE;
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
+INSERT INTO `company` VALUES (1,1,'Silicon Valley','Tech Innovators Inc.','We specialize in building scalable software solutions for global clients.','in_review');
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +262,7 @@ CREATE TABLE `jobs` (
   PRIMARY KEY (`job_id`),
   KEY `FK9ur2hhhufsmctegg8mad7967k` (`employer_id`),
   CONSTRAINT `FK9ur2hhhufsmctegg8mad7967k` FOREIGN KEY (`employer_id`) REFERENCES `company` (`company_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,6 +271,7 @@ CREATE TABLE `jobs` (
 
 LOCK TABLES `jobs` WRITE;
 /*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+INSERT INTO `jobs` VALUES (1,1,1200000,800000,5,'Bangalore','Develop enterprise-level applications','Senior Java Developer','published'),(1,2,1200000,800000,5,'Bangalore','Develop enterprise-level applications','Senior Java Developer','published'),(1,3,1200000,800000,5,'Bangalore','Develop enterprise-level applications','Senior Java Developer','published');
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,6 +296,7 @@ CREATE TABLE `jobs_skills` (
 
 LOCK TABLES `jobs_skills` WRITE;
 /*!40000 ALTER TABLE `jobs_skills` DISABLE KEYS */;
+INSERT INTO `jobs_skills` VALUES (1,'Java'),(1,'Spring Boot'),(1,'Microservices'),(2,'Java'),(2,'Spring Boot'),(2,'Microservices'),(3,'Java'),(3,'Spring Boot'),(3,'Microservices');
 /*!40000 ALTER TABLE `jobs_skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,7 +317,7 @@ CREATE TABLE `user` (
   `role` enum('admin','jobseeker','recruiter') NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UKob8kqyqqgmefl0aco34akdtpe` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,6 +326,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'9876543210','alice.recruiter@example.com','Alice Johnson','456 Corporate Ave, Tech City','StrongPassword123','recruiter');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -335,4 +339,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-12  5:40:47
+-- Dump completed on 2025-07-12  5:55:54
